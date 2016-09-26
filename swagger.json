@@ -1,0 +1,144 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "Compute Service API"
+  },
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "Check if the server is working at all, returns some status info.",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/jobs" : {
+      "post" : {
+        "summary" : "submit a new job",
+        "description" : "Submit a new job from a workflow definition.",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "workflow",
+          "description" : "location of cwl workflow definition.",
+          "type" : "string",
+          "format" : "uri",
+          "required" : true
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "input binding for cwl workflow (json key value pairs)",
+          "schema" : {
+            "$ref" : "#/definitions/cwl-binding"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "get" : {
+        "summary" : "list of jobs",
+        "description" : "get a list of all jobs, running, cancelled, or otherwise.",
+        "responses" : {
+          "200" : {
+            "description" : "list of jobs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/job"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs/{jobId}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "jobId",
+          "in" : "path",
+          "type" : "string",
+          "description" : "Job ID",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Status of job",
+            "schema" : {
+              "$ref" : "#/definitions/job"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "jobId",
+          "in" : "path",
+          "type" : "string",
+          "description" : "Job ID",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Job deleted (will cancel if still running)"
+          }
+        }
+      }
+    },
+    "/jobs/{jobId}/cancel" : {
+      "post" : {
+        "parameters" : [ {
+          "name" : "jobId",
+          "in" : "path",
+          "type" : "string",
+          "description" : "Job ID",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Job cancelled if still running"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "cwl-binding" : {
+      "type" : "object",
+      "additionalProperties" : true
+    },
+    "job" : {
+      "type" : "object",
+      "required" : [ "id", "workflow", "input", "state", "output", "log" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "format" : "uri"
+        },
+        "workflow" : {
+          "type" : "string",
+          "format" : "uri"
+        },
+        "input" : {
+          "$ref" : "#/definitions/cwl-binding"
+        },
+        "state" : {
+          "type" : "string",
+          "enum" : [ "Waiting", "Running", "Success", "Canceled", "TemporaryFailure", "Failed", "SystemError" ]
+        },
+        "output" : {
+          "$ref" : "#/definitions/cwl-binding"
+        },
+        "log" : {
+          "type" : "string",
+          "format" : "uri"
+        }
+      }
+    }
+  }
+}
