@@ -1,0 +1,134 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Compute Service API"
+paths:
+  /:
+    get:
+      tags:
+      - "default_controller"
+      summary: "Check if the server is working at all, returns some status info."
+      operationId: "controllers.default_controller.root_get"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+  /jobs:
+    get:
+      tags:
+      - "default_controller"
+      summary: "list of jobs"
+      description: "get a list of all jobs, running, cancelled, or otherwise."
+      operationId: "controllers.default_controller.jobs_get"
+      parameters: []
+      responses:
+        200:
+          description: "list of jobs"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/job"
+    post:
+      tags:
+      - "default_controller"
+      summary: "submit a new job"
+      description: "Submit a new job from a workflow definition."
+      operationId: "controllers.default_controller.jobs_post"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "workflow"
+        in: "query"
+        description: "location of cwl workflow definition."
+        required: true
+        type: "string"
+        format: "uri"
+      - in: "body"
+        name: "body"
+        description: "Input binding for cwl workflow."
+        required: false
+        schema:
+          $ref: "#/definitions/cwl-binding"
+      responses:
+        201:
+          description: "OK"
+  /jobs/{jobId}:
+    get:
+      tags:
+      - "default_controller"
+      operationId: "controllers.default_controller.jobs_job_id_get"
+      parameters:
+      - name: "jobId"
+        in: "path"
+        description: "Job ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Status of job"
+          schema:
+            $ref: "#/definitions/job"
+    delete:
+      tags:
+      - "default_controller"
+      operationId: "controllers.default_controller.jobs_job_id_delete"
+      parameters:
+      - name: "jobId"
+        in: "path"
+        description: "Job ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Job deleted (will cancel if still running)"
+  /jobs/{jobId}/cancel:
+    post:
+      tags:
+      - "default_controller"
+      operationId: "controllers.default_controller.jobs_job_id_cancel_post"
+      parameters:
+      - name: "jobId"
+        in: "path"
+        description: "Job ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Job cancelled if still running"
+definitions:
+  cwl-binding:
+    type: "object"
+  job:
+    type: "object"
+    required:
+    - "id"
+    - "input"
+    - "log"
+    - "output"
+    - "state"
+    - "workflow"
+    properties:
+      id:
+        type: "string"
+        format: "uri"
+      workflow:
+        type: "string"
+        format: "uri"
+      input:
+        $ref: "#/definitions/cwl-binding"
+      state:
+        type: "string"
+        enum:
+        - "Waiting"
+        - "Running"
+        - "Success"
+        - "Canceled"
+        - "TemporaryFailure"
+        - "Failed"
+        - "SystemError"
+      output:
+        $ref: "#/definitions/cwl-binding"
+      log:
+        type: "string"
+        format: "uri"
