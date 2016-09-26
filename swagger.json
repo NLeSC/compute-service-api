@@ -30,7 +30,7 @@
         }, {
           "in" : "body",
           "name" : "body",
-          "description" : "input binding for cwl workflow (json key value pairs)",
+          "description" : "Input binding for cwl workflow.",
           "schema" : {
             "$ref" : "#/definitions/cwl-binding"
           }
