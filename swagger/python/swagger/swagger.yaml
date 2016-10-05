@@ -123,10 +123,10 @@ definitions:
         - "Waiting"
         - "Running"
         - "Success"
-        - "Canceled"
-        - "TemporaryFailure"
-        - "Failed"
+        - "Cancelled"
         - "SystemError"
+        - "TemporaryFailure"
+        - "PermanentFailure"
       output:
         $ref: "#/definitions/cwl-binding"
       log:
