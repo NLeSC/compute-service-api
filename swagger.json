@@ -21,13 +21,6 @@
         "description" : "Submit a new job from a workflow definition.",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
-          "in" : "query",
-          "name" : "workflow",
-          "description" : "location of cwl workflow definition.",
-          "type" : "string",
-          "format" : "uri",
-          "required" : true
-        }, {
           "in" : "body",
           "name" : "body",
           "description" : "Input binding for cwl workflow.",
@@ -110,7 +103,15 @@
   "definitions" : {
     "cwl-binding" : {
       "type" : "object",
-      "additionalProperties" : true
+      "required" : ["cwl:tool"],
+      "additionalProperties" : true,
+      "properties": {
+        "cwl:tool": {
+          "type" : "string",
+          "description" : "location of cwl workflow definition.",
+          "format" : "uri"
+        }
+      }
     },
     "job" : {
       "type" : "object",
