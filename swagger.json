@@ -129,7 +129,7 @@
         },
         "state" : {
           "type" : "string",
-          "enum" : [ "Waiting", "Running", "Success", "Canceled", "TemporaryFailure", "Failed", "SystemError" ]
+          "enum" : [ "Waiting", "Running", "Success", "Cancelled", "SystemError", "TemporaryFailure", "PermanentFailure" ]
         },
         "output" : {
           "$ref" : "#/definitions/cwl-binding"
