@@ -8,6 +8,7 @@
     "/" : {
       "get" : {
         "summary" : "Check if the server is working at all, returns some status info.",
+        "produces" : [ "application/json" ],
         "responses" : {
           "200" : {
             "description" : "OK"
@@ -20,6 +21,7 @@
         "summary" : "submit a new job",
         "description" : "Submit a new job from a workflow definition.",
         "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "body",
