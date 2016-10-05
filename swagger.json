@@ -21,18 +21,11 @@
         "description" : "Submit a new job from a workflow definition.",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
-          "in" : "query",
-          "name" : "workflow",
-          "description" : "location of cwl workflow definition.",
-          "type" : "string",
-          "format" : "uri",
-          "required" : true
-        }, {
           "in" : "body",
           "name" : "body",
           "description" : "Input binding for cwl workflow.",
           "schema" : {
-            "$ref" : "#/definitions/cwl-binding"
+            "$ref" : "#/definitions/cwl-input-binding"
           }
         } ],
         "responses" : {
@@ -108,31 +101,39 @@
     }
   },
   "definitions" : {
-    "cwl-binding" : {
+    "cwl-input-binding" : {
+      "type" : "object",
+      "required" : ["cwl:tool"],
+      "additionalProperties" : true,
+      "properties": {
+        "cwl:tool": {
+          "type" : "string",
+          "description" : "location of cwl workflow definition.",
+          "format" : "uri"
+        }
+      }
+    },
+    "cwl-output-binding" : {
       "type" : "object",
       "additionalProperties" : true
     },
     "job" : {
       "type" : "object",
-      "required" : [ "id", "workflow", "input", "state", "output", "log" ],
+      "required" : [ "id", "input", "state", "output", "log" ],
       "properties" : {
         "id" : {
           "type" : "string",
           "format" : "uri"
         },
-        "workflow" : {
-          "type" : "string",
-          "format" : "uri"
-        },
         "input" : {
-          "$ref" : "#/definitions/cwl-binding"
+          "$ref" : "#/definitions/cwl-input-binding"
         },
         "state" : {
           "type" : "string",
           "enum" : [ "Waiting", "Running", "Success", "Cancelled", "SystemError", "TemporaryFailure", "PermanentFailure" ]
         },
         "output" : {
-          "$ref" : "#/definitions/cwl-binding"
+          "$ref" : "#/definitions/cwl-output-binding"
         },
         "log" : {
           "type" : "string",
