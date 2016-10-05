@@ -113,7 +113,7 @@
         }
       }
     },
-    "cwl-binding" : {
+    "cwl-output-binding" : {
       "type" : "object",
       "additionalProperties" : true
     },
@@ -133,7 +133,7 @@
           "enum" : [ "Waiting", "Running", "Success", "Cancelled", "SystemError", "TemporaryFailure", "PermanentFailure" ]
         },
         "output" : {
-          "$ref" : "#/definitions/cwl-binding"
+          "$ref" : "#/definitions/cwl-output-binding"
         },
         "log" : {
           "type" : "string",
