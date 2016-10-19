@@ -1,3 +1,3 @@
 # compute-service-api
 
-[Goto editor](http://editor.swagger.io/#/?import=https://github.com/NLeSC/cwl-compute-service-api/raw/master/swagger.json)
+DO NOT USE. See https://github.com/NLeSC/workflow-execution-schemas for the new location of this api
